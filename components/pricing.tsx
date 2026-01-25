@@ -3,39 +3,22 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { CheckCircle2 } from "lucide-react"
-import { ExamplesDialog } from "./examples-dialog"
+import { Carousel } from "./Carousel" // Make sure this path matches where you saved Carousel.tsx
 
-
+// --- TYPES & HELPERS ---
 type Feature = { text: string; muted?: boolean }
+type Currency = "INR" | "USD"
 
 const ACCENT = "#C6FF3A"
 
 function FeatureItem({ text, muted = false }: Feature) {
   return (
     <li className="flex items-start gap-2">
-      <CheckCircle2 className="mt-0.5 h-4 w-4" style={{ color: ACCENT }} />
+      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" style={{ color: ACCENT }} />
       <span className={`text-sm ${muted ? "text-neutral-500" : "text-neutral-200"}`}>{text}</span>
     </li>
   )
-}
-
-type Currency = "INR" | "USD"
-
-const PRICES: Record<Currency, { startup: string; pro: string; premium: string; save: string }> = {
-  INR: {
-    startup: "₹25,000/-",
-    pro: "₹55,000/-",
-    premium: "₹1,70,500/-",
-    save: "Save Flat ₹1,500/-",
-  },
-  USD: {
-    startup: "$299",
-    pro: "$699",
-    premium: "$2,049",
-    save: "Save $20",
-  },
 }
 
 function guessLocalCurrency(): Currency {
@@ -45,14 +28,53 @@ function guessLocalCurrency(): Currency {
   return "USD"
 }
 
-const startupVideos = ["ysz5S6PUM-U", "aqz-KE-bpKQ", "ScMzIvxBSi4"]
-const proVideos = ["ASV2myPRfKA", "eTfS2lqwf6A", "KALbYHmGV4I"]
-const premiumVideos = ["v2AC41dglnM", "pRpeEdMmmQ0", "3AtDnEC4zak"]
+// --- DATA ---
+const PLAN_DATA = [
+  {
+    title: "Static Website",
+    price: "₹4,000 - ₹7,000",
+    features: [
+      "Basic HTML/CSS/JS",
+      "3-5 pages",
+      "Mobile responsive",
+      "Contact forms"
+    ]
+  },
+  {
+    title: "Dynamic Website",
+    price: "₹10,000 - ₹25,000+",
+    features: [
+      "Full-stack development",
+      "Custom backend",
+      "Database integration",
+      "Admin dashboard"
+    ]
+  },
+  {
+    title: "E-commerce Site",
+    price: "₹15,000 - ₹30,000",
+    features: [
+      "Product catalog",
+      "Shopping cart",
+      "Payment gateway",
+      "Order management"
+    ]
+  },
+  {
+    title: "AI Integration",
+    price: "₹5,000 - ₹50,000+",
+    features: [
+      "Custom chatbots",
+      "OCR/Document processing",
+      "Recommendation systems",
+      "Business automation"
+    ]
+  }
+]
 
+// --- MAIN COMPONENT ---
 export function Pricing() {
-  const [openPlan, setOpenPlan] = useState<null | "Startup" | "Pro" | "Premium">(null)
   const [currency, setCurrency] = useState<Currency>("USD")
-
 
   useEffect(() => {
     let cancelled = false
@@ -75,7 +97,9 @@ export function Pricing() {
   return (
     <section id="pricing" className="text-white" itemScope itemType="https://schema.org/PriceSpecification">
       <div className="container mx-auto px-4 py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl text-center">
+        
+        {/* Header Content */}
+        <div className="mx-auto max-w-3xl text-center mb-10">
           <div
             className="mx-auto mb-4 inline-flex items-center rounded-full px-3 py-1 text-xs font-medium"
             style={{ backgroundColor: "rgba(198,255,58,0.12)", color: ACCENT }}
@@ -101,93 +125,51 @@ export function Pricing() {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="relative overflow-hidden rounded-2xl liquid-glass shadow-[0_12px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
-            <CardHeader className="space-y-3 pb-4">
-              <div className="text-sm font-semibold text-neutral-200">Static Website</div>
-              <div className="flex items-end gap-2 text-neutral-100">
-                <div className="text-xl font-bold tracking-tight">₹4,000 - ₹7,000</div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <ul className="grid gap-2">
-                {[
-                  "Basic HTML/CSS/JS",
-                  "3-5 pages",
-                  "Mobile responsive",
-                  "Contact forms"
-                ].map((f, i) => (
-                  <FeatureItem key={i} text={f} />
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+        {/* --- CAROUSEL SECTION --- */}
+        <div className="relative w-full mt-10">
+          <Carousel cardWidth={300}>
+            {PLAN_DATA.map((plan, index) => (
+              /* We use a clean div here instead of the Card component.
+                 The border, background, and "Active" green glow are handled 
+                 by the Carousel.module.css on the parent wrapper.
+              */
+              <div key={index} className="h-full flex flex-col p-6 text-left">
+                
+                {/* Header */}
+                <div className="space-y-3 pb-4 mb-4 border-b border-neutral-800">
+                  <div className="text-sm font-semibold text-neutral-200">
+                    {plan.title}
+                  </div>
+                  <div className="flex items-end gap-2 text-neutral-100">
+                    <div className="text-xl font-bold tracking-tight">
+                      {plan.price}
+                    </div>
+                  </div>
+                </div>
 
-          <Card className="relative overflow-hidden rounded-2xl liquid-glass shadow-[0_12px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
-            <CardHeader className="space-y-3 pb-4">
-              <div className="text-sm font-semibold text-neutral-200">Dynamic Website</div>
-              <div className="flex items-end gap-2 text-neutral-100">
-                <div className="text-xl font-bold tracking-tight">₹10,000 - ₹25,000+</div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <ul className="grid gap-2">
-                {[
-                  "Full-stack development",
-                  "Custom backend",
-                  "Database integration",
-                  "Admin dashboard"
-                ].map((f, i) => (
-                  <FeatureItem key={i} text={f} />
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+                {/* Features List */}
+                <ul className="grid gap-3">
+                  {plan.features.map((feature, i) => (
+                    <FeatureItem key={i} text={feature} />
+                  ))}
+                </ul>
 
-          <Card className="relative overflow-hidden rounded-2xl liquid-glass shadow-[0_12px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
-            <CardHeader className="space-y-3 pb-4">
-              <div className="text-sm font-semibold text-neutral-200">E-commerce Site</div>
-              <div className="flex items-end gap-2 text-neutral-100">
-                <div className="text-xl font-bold tracking-tight">₹15,000 - ₹30,000</div>
+                {/* Footer Button inside card (Optional) */}
+                <div className="mt-auto pt-6">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-neutral-700 bg-transparent text-neutral-300 hover:bg-neutral-800 hover:text-white"
+                  >
+                    Details
+                  </Button>
+                </div>
               </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <ul className="grid gap-2">
-                {[
-                  "Product catalog",
-                  "Shopping cart",
-                  "Payment gateway",
-                  "Order management"
-                ].map((f, i) => (
-                  <FeatureItem key={i} text={f} />
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="relative overflow-hidden rounded-2xl liquid-glass-enhanced shadow-[0_16px_50px_rgba(0,0,0,0.4)] transition-all duration-300">
-            <CardHeader className="space-y-3 pb-4">
-              <div className="text-sm font-semibold text-neutral-200">AI Integration</div>
-              <div className="flex items-end gap-2 text-white">
-                <div className="text-xl font-bold tracking-tight">₹5,000 - ₹50,000+</div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <ul className="grid gap-2">
-                {[
-                  "Custom chatbots",
-                  "OCR/Document processing",
-                  "Recommendation systems",
-                  "Business automation"
-                ].map((f, i) => (
-                  <FeatureItem key={i} text={f} />
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+            ))}
+          </Carousel>
         </div>
-        
-        <div className="mt-8 text-center">
+
+        {/* Bottom CTA */}
+        <div className="mt-16 text-center">
           <Button
             asChild
             className="rounded-full bg-lime-400 px-6 text-black hover:bg-lime-300"
@@ -197,9 +179,8 @@ export function Pricing() {
             </Link>
           </Button>
         </div>
+
       </div>
-
-
     </section>
   )
 }

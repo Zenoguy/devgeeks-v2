@@ -1,0 +1,111 @@
+/* Carousel.module.css */
+
+.scene {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 500px;
+  perspective: 2000px;
+  perspective-origin: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carouselWrapper {
+  position: relative;
+  width: 300px;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* INDIVIDUAL CARD WRAPPER */
+.cardWrapper {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: 400px;
+  transition: all 0.5s ease-out;
+  border-radius: 16px;
+  
+  /* BASE OPAQUE BACKGROUND */
+  background-color: #171717; /* Solid neutral-900 */
+  border: 1px solid #262626; /* neutral-800 */
+}
+
+/* THE GREY DIMMING LAYER */
+.cardWrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background-color: #000;
+  opacity: 0.6;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+
+/* --- ACTIVE (MIDDLE) CARD STYLING --- */
+.cardWrapper.front {
+  z-index: 50;
+  border-color: #C6FF3A; /* Green Border */
+  
+  /* FIXED: Opaque background with a subtle green center glow */
+  /* This ensures you cannot see through the card */
+  background-color: #171717; 
+  background-image: radial-gradient(circle at center, #222e05 0%, #171717 100%);
+  
+  box-shadow: 0 0 30px rgba(198, 255, 58, 0.15);
+}
+
+.cardWrapper.front::after {
+  opacity: 0; /* Clear view of the active card */
+}
+
+/* NEIGHBORS (Clickable) */
+.cardWrapper.clickable {
+  cursor: pointer;
+  z-index: 40;
+}
+.cardWrapper.clickable::after {
+  opacity: 0.3;
+}
+
+/* --- NAVIGATION BUTTONS --- */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.8); /* Darker background for visibility */
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.navBtn:hover {
+  background-color: #C6FF3A;
+  color: #000;
+  border-color: #C6FF3A;
+}
+
+/* Position them at the far edges */
+.prev { left: 20px; }
+.next { right: 20px; }
+
+@media (max-width: 768px) {
+  .prev { left: 0; }
+  .next { right: 0; }
+}
