@@ -11,7 +11,7 @@ export function Team() {
       url: "https://linkedin.com/in/",
     },
     {
-      image: "https://i.pravatar.cc/300?img=11",
+      image: "https://raw.githubusercontent.com/satyop7/devgeeks-v2/refs/heads/main/public/assets/devgeeks-1.png",
       title: "Jordan Chen",
       subtitle: "Lead Animator",
       handle: "@jordanchen",
