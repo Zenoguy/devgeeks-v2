@@ -12,9 +12,9 @@ export function Team() {
     },
     {
       image: "https://raw.githubusercontent.com/satyop7/devgeeks-v2/refs/heads/main/public/assets/devgeeks-1.png",
-      title: "Jordan Chen",
-      subtitle: "Lead Animator",
-      handle: "@jordanchen",
+      title: "Satyadeep Paul",
+      subtitle: "Devops Engineer",
+      handle: "@satyop7",
       gradient: "linear-gradient(210deg, #EF4444, #000)",
       url: "https://linkedin.com/in/",
     },
